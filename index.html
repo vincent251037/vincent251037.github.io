@@ -583,11 +583,51 @@
       margin-top: 2rem;
     }
 
+    .ride-panel-wrap {
+      position: relative;
+    }
+
     .ride-panel iframe {
       width: 100%;
       height: 660px;
       border: 1px solid var(--border);
       display: block;
+    }
+
+    .panel-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      background: var(--bg);
+      color: var(--muted);
+      font-size: 0.62rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 1;
+    }
+
+    .panel-loader::after {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: loader-pulse 1.2s ease-in-out infinite;
+    }
+
+    @keyframes loader-pulse {
+      0%, 100% { opacity: 0.25; transform: scale(0.7); }
+      50%       { opacity: 1;    transform: scale(1.2); }
+    }
+
+    .panel-loader.loaded {
+      opacity: 0;
+      pointer-events: none;
     }
 
     .portfolio-item.active {
@@ -1089,7 +1129,11 @@
 
         <!-- AI panel：緊接在第一排卡片後，手機版正好在 AI 工具卡片下方 -->
         <div class="ride-panel" id="ai-panel">
-          <iframe id="ai-iframe" src="ai-tools/index.html?embed=1" title="AI 工具實驗記錄" loading="lazy"></iframe>
+          <div class="ride-panel-wrap">
+            <div class="panel-loader" id="ai-loader">載入中</div>
+            <iframe id="ai-iframe" src="ai-tools/index.html?embed=1" title="AI 工具實驗記錄"
+                    onload="panelLoaded('ai-loader')"></iframe>
+          </div>
         </div>
 
         <div class="portfolio-item fade-up" id="hike-card" onclick="toggleHikePanel(this)" style="cursor:pointer;">
@@ -1107,10 +1151,18 @@
 
         <!-- Hike / Ride panels：緊接在第二排卡片後 -->
         <div class="ride-panel" id="hike-panel">
-          <iframe id="hike-iframe" src="hikes/index.html?embed=1" title="健行日誌" loading="lazy"></iframe>
+          <div class="ride-panel-wrap">
+            <div class="panel-loader" id="hike-loader">載入中</div>
+            <iframe id="hike-iframe" src="hikes/index.html?embed=1" title="健行日誌"
+                    onload="panelLoaded('hike-loader')"></iframe>
+          </div>
         </div>
         <div class="ride-panel" id="ride-panel">
-          <iframe id="ride-iframe" src="rides/index.html?embed=1" title="騎行日誌" loading="lazy"></iframe>
+          <div class="ride-panel-wrap">
+            <div class="panel-loader" id="ride-loader">載入中</div>
+            <iframe id="ride-iframe" src="rides/index.html?embed=1" title="騎行日誌"
+                    onload="panelLoaded('ride-loader')"></iframe>
+          </div>
         </div>
       </div>
     </div>
@@ -1195,6 +1247,12 @@
         nav.classList.toggle('scrolled', window.scrollY > heroHeight * 0.5);
       }, { passive: true });
     }());
+
+    /* ---- LOADING INDICATOR ---- */
+    function panelLoaded(loaderId) {
+      var el = document.getElementById(loaderId);
+      if (el) el.classList.add('loaded');
+    }
 
     /* ---- PANEL HELPERS ---- */
     function closePanel(panelId, cardId) {
