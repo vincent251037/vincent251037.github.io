@@ -305,14 +305,14 @@ if (new URLSearchParams(location.search).has('embed')) {
       <table class="ride-table">
         <thead>
           <tr>
-            <th style="width:18%">${JOURNAL_CONFIG.routeColLabel}</th>
-            <th style="width:15%">日期</th>
+            <th style="width:21%">${JOURNAL_CONFIG.routeColLabel}</th>
+            <th style="width:12%">日期</th>
             <th style="width:10%">里程</th>
             <th style="width:10%">爬升</th>
             <th style="width:10%">下降</th>
             <th style="width:12%">時間</th>
-            <th style="width:13%">天氣</th>
-            <th style="width:12%">卡路里</th>
+            <th style="width:12%">天氣</th>
+            <th style="width:13%">卡路里</th>
           </tr>
         </thead>
         <tbody>${rowsHTML}</tbody>

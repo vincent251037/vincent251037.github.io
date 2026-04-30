@@ -457,9 +457,28 @@
 
     .portfolio-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.5rem;
       margin-top: 2.5rem;
+    }
+
+    /* Panels span full width inside the grid */
+    .portfolio-grid .ride-panel {
+      grid-column: 1 / -1;
+    }
+
+    /* Desktop ≥ 861px: restore 4-col, pin all 4 cards to row 1 */
+    @media (min-width: 861px) {
+      .portfolio-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .portfolio-grid > a.portfolio-item  { grid-column: 1; grid-row: 1; }
+      .portfolio-grid > #ai-card          { grid-column: 2; grid-row: 1; }
+      .portfolio-grid > #hike-card        { grid-column: 3; grid-row: 1; }
+      .portfolio-grid > #ride-card        { grid-column: 4; grid-row: 1; }
+      .portfolio-grid > #ai-panel         { grid-column: 1 / -1; grid-row: 2; }
+      .portfolio-grid > #hike-panel       { grid-column: 1 / -1; grid-row: 3; }
+      .portfolio-grid > #ride-panel       { grid-column: 1 / -1; grid-row: 4; }
     }
 
     .portfolio-item {
@@ -856,10 +875,6 @@
         display: none;
       }
 
-      .portfolio-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
     }
 
     @media (max-width: 640px) {
@@ -1050,6 +1065,12 @@
           <p class="portfolio-desc">用 Claude、ChatGPT 和其他工具做實驗——什麼有效、什麼出乎意料，都記下來。持續更新中。</p>
           <span class="portfolio-arrow">↓</span>
         </div>
+
+        <!-- AI panel：緊接在第一排卡片後，手機版正好在 AI 工具卡片下方 -->
+        <div class="ride-panel" id="ai-panel">
+          <iframe id="ai-iframe" src="ai-tools/index.html?embed=1" title="AI 工具實驗記錄" loading="lazy"></iframe>
+        </div>
+
         <div class="portfolio-item fade-up" id="hike-card" onclick="toggleHikePanel(this)" style="cursor:pointer;">
           <p class="portfolio-cat">Hiking · 生活</p>
           <h3 class="portfolio-title">健行日誌</h3>
@@ -1062,21 +1083,14 @@
           <p class="portfolio-desc">台灣的山路與海岸——每一段路都是思考的延伸，每一次出發都是清空的機會。</p>
           <span class="portfolio-arrow">↓</span>
         </div>
-      </div>
 
-      <!-- AI Tools Panel -->
-      <div class="ride-panel" id="ai-panel">
-        <iframe id="ai-iframe" src="ai-tools/index.html?embed=1" title="AI 工具實驗記錄" loading="lazy"></iframe>
-      </div>
-
-      <!-- Hike Panel -->
-      <div class="ride-panel" id="hike-panel">
-        <iframe id="hike-iframe" src="hikes/index.html?embed=1" title="健行日誌" loading="lazy"></iframe>
-      </div>
-
-      <!-- Ride Map Panel -->
-      <div class="ride-panel" id="ride-panel">
-        <iframe id="ride-iframe" src="rides/index.html?embed=1" title="騎行日誌" loading="lazy"></iframe>
+        <!-- Hike / Ride panels：緊接在第二排卡片後 -->
+        <div class="ride-panel" id="hike-panel">
+          <iframe id="hike-iframe" src="hikes/index.html?embed=1" title="健行日誌" loading="lazy"></iframe>
+        </div>
+        <div class="ride-panel" id="ride-panel">
+          <iframe id="ride-iframe" src="rides/index.html?embed=1" title="騎行日誌" loading="lazy"></iframe>
+        </div>
       </div>
     </div>
   </section>
@@ -1172,6 +1186,14 @@
       }
     }
 
+    function scrollToPanel(panelId) {
+      if (window.innerWidth <= 700) {
+        setTimeout(function () {
+          document.getElementById(panelId).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 120);
+      }
+    }
+
     /* ---- AI TOOLS PANEL (iframe) ---- */
     function toggleAiPanel(card) {
       var panel = document.getElementById('ai-panel');
@@ -1181,6 +1203,7 @@
       panel.classList.toggle('open', !isOpen);
       card.classList.toggle('active', !isOpen);
       card.querySelector('.portfolio-arrow').textContent = isOpen ? '↓' : '↑';
+      if (!isOpen) scrollToPanel('ai-panel');
     }
 
     /* ---- HIKE PANEL (iframe) ---- */
@@ -1192,6 +1215,7 @@
       panel.classList.toggle('open', !isOpen);
       card.classList.toggle('active', !isOpen);
       card.querySelector('.portfolio-arrow').textContent = isOpen ? '↓' : '↑';
+      if (!isOpen) scrollToPanel('hike-panel');
     }
 
     /* ---- RIDE PANEL (iframe) ---- */
@@ -1203,6 +1227,7 @@
       panel.classList.toggle('open', !isOpen);
       card.classList.toggle('active', !isOpen);
       card.querySelector('.portfolio-arrow').textContent = isOpen ? '↓' : '↑';
+      if (!isOpen) scrollToPanel('ride-panel');
     }
 
     /* ---- COLLAPSE PANELS WHEN SECTION LEAVES VIEWPORT ---- */

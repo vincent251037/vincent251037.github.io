@@ -149,6 +149,14 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+/* 路線欄允許換行，確保完整顯示 */
+.ride-row td:first-child {
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.45;
 }
 .ride-row td .unit {
   font-family: system-ui, sans-serif;
@@ -224,6 +232,7 @@ body {
 @media (max-width: 860px) {
   #content { padding: 2rem 1.5rem 4rem; }
   #page-header { padding: 1.1rem 1.5rem; }
+  /* 隱藏：爬升、下降、卡路里 */
   .ride-table th:nth-child(4),
   .ride-table th:nth-child(5),
   .ride-table th:nth-child(8),
@@ -231,4 +240,13 @@ body {
   .ride-row  td:nth-child(5),
   .ride-row  td:nth-child(8) { display: none; }
   .ride-map { height: 260px; }
+}
+
+@media (max-width: 480px) {
+  /* 極窄螢幕再隱藏天氣，只留：路線、日期、里程、時間 */
+  .ride-table th:nth-child(7),
+  .ride-row  td:nth-child(7) { display: none; }
+  .ride-table th, .ride-row td { padding: 0.9rem 0.6rem; }
+  .ride-summary { flex-wrap: wrap; gap: 1rem; }
+  .ride-summary-divider { display: none; }
 }
