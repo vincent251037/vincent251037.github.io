@@ -221,11 +221,33 @@ if (new URLSearchParams(location.search).has('embed')) {
   document.getElementById('page-header').style.display = 'none';
 }
 
+/* ── Prev / Next row navigation ── */
+function jumpToRow(currentIdx, delta) {
+  const rows = Array.from(document.querySelectorAll('.ride-row:not(.hidden)'));
+  const rowIds = rows.map(r => parseInt(r.id.replace('row-', '')));
+  const pos = rowIds.indexOf(currentIdx);
+  const nextPos = pos + delta;
+  if (nextPos < 0 || nextPos >= rowIds.length) return;
+  const nextIdx = rowIds[nextPos];
+  const nextRow = document.getElementById('row-' + nextIdx);
+  document.querySelectorAll('.ride-detail-row').forEach(r => r.classList.remove('open'));
+  document.querySelectorAll('.ride-row').forEach(r => r.classList.remove('active'));
+  toggleRow(nextIdx, nextRow.dataset.file, nextRow);
+  nextRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
 /* ── Boot ── */
 (async () => {
   const content = document.getElementById('content');
   try {
-    const index = await fetch('data/index.json').then(r => r.json());
+    const [index, notes] = await Promise.all([
+      fetch('data/index.json').then(r => r.json()),
+      fetch('notes.json').then(r => r.json()).catch(() => ({})),
+    ]);
+    index.forEach(item => {
+      const stem = item.file.replace('.json', '');
+      if (notes[stem]) item.note = notes[stem];
+    });
 
     const totalDist = index.reduce((s, i) => s + i.total_distance_km, 0);
     const totalAsc  = index.reduce((s, i) => s + i.total_ascent_m,  0);
@@ -252,8 +274,9 @@ if (new URLSearchParams(location.search).has('embed')) {
         ? `<td>${item.calories.toLocaleString()}<span class="unit">kcal</span></td>`
         : `<td>—</td>`;
       const itemName = JOURNAL_CONFIG.nameFor(item, detectArea);
+      const totalRows = index.length;
       rowsHTML += `
-        <tr class="ride-row" id="row-${idx}" data-area="${areaKey}"
+        <tr class="ride-row" id="row-${idx}" data-area="${areaKey}" data-file="${item.file}"
             onclick="toggleRow(${idx},'${item.file}',this)"
             onmouseleave="rowMouseLeave(${idx},event)">
           <td title="${itemName}">${itemName} <span class="ride-row-arrow">›</span></td>
@@ -268,10 +291,15 @@ if (new URLSearchParams(location.search).has('embed')) {
         <tr class="ride-detail-row" id="detail-${idx}" onmouseleave="detailMouseLeave(${idx},event)">
           <td colspan="8">
             <div class="ride-detail-inner">
+              ${item.note ? `<div class="ride-detail-note">${item.note}</div>` : ''}
               <div id="ride-map-${idx}" class="ride-map"></div>
               <div class="ride-chart-wrap">
                 <div class="ride-chart-label">海拔剖面</div>
                 <canvas id="ele-chart-${idx}" class="ele-chart"></canvas>
+              </div>
+              <div class="ride-detail-nav">
+                <button class="detail-nav-btn" onclick="jumpToRow(${idx},-1)" ${idx===0?'disabled':''}>← 上一筆</button>
+                <button class="detail-nav-btn" onclick="jumpToRow(${idx},1)" ${idx===totalRows-1?'disabled':''}>下一筆 →</button>
               </div>
             </div>
           </td>

@@ -716,19 +716,45 @@
     }
 
     .photo-item.tall {
-      width: 260px;
-      height: 360px;
+      width: 210px;
+      height: 295px;
     }
 
     .photo-item.wide {
-      width: 480px;
-      height: 300px;
+      width: 300px;
+      height: 190px;
     }
 
     .photo-item.sq {
-      width: 300px;
-      height: 300px;
+      width: 245px;
+      height: 245px;
     }
+
+    /* ── Photo nav arrows ── */
+    .photo-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(10,10,10,0.78);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 1.3rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .photo-nav:hover { background: rgba(201,169,110,0.18); border-color: var(--accent); }
+    .photo-nav-l { left: 0.75rem; }
+    .photo-nav-r { right: 0.75rem; }
+    @media (max-width: 640px) { .photo-nav { display: none; } }
 
     .photo-placeholder {
       width: 100%;
@@ -775,11 +801,8 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 2rem 1.25rem 1rem;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
-      color: rgba(240, 234, 214, 0.6);
+      padding: 2rem 1rem 0.75rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.78), transparent);
       opacity: 0;
       transform: translateY(6px);
       transition: opacity 0.3s, transform 0.3s;
@@ -790,6 +813,23 @@
       transform: translateY(0);
     }
 
+    .photo-caption-date {
+      display: block;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      opacity: 0.85;
+      margin-bottom: 0.2rem;
+    }
+
+    .photo-caption-text {
+      display: block;
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+      color: rgba(240, 234, 214, 0.75);
+      line-height: 1.5;
+    }
+
     .photo-hint {
       text-align: center;
       padding-bottom: 2.5rem;
@@ -798,6 +838,20 @@
       text-transform: uppercase;
       color: var(--muted);
       opacity: 0.5;
+    }
+
+    .photo-hint-arrow {
+      display: inline-block;
+      animation: hint-slide 1.8s ease-in-out infinite;
+    }
+
+    .photo-hint-arrow-r {
+      animation-direction: alternate;
+    }
+
+    @keyframes hint-slide {
+      0%, 100% { transform: translateX(0); }
+      50%       { transform: translateX(-5px); }
     }
 
     /* ============================
@@ -1177,9 +1231,15 @@
     </div>
 
     <div class="photo-strip-wrap fade-up">
+      <button class="photo-nav photo-nav-l" onclick="photoNav(-1)" aria-label="上一張">‹</button>
       <div class="photo-strip" id="photo-strip"></div>
+      <button class="photo-nav photo-nav-r" onclick="photoNav(1)" aria-label="下一張">›</button>
     </div>
-    <p class="photo-hint">← drag to explore →</p>
+    <p class="photo-hint">
+      <span class="photo-hint-arrow">←</span>
+      &nbsp;drag to explore&nbsp;
+      <span class="photo-hint-arrow photo-hint-arrow-r">→</span>
+    </p>
   </section>
 
   <!-- ===================== CONTACT ===================== -->
@@ -1334,10 +1394,17 @@
           var strip = document.getElementById('photo-strip');
           strip.innerHTML = manifest.map(function (p) {
             var alt = p.caption || p.file;
+            var dateStr = p.date ? p.date.slice(0, 7).replace('-', '.') : '';
+            var caption = '';
+            if (p.caption || dateStr) {
+              caption = '<div class="photo-caption">' +
+                (dateStr ? '<span class="photo-caption-date">' + dateStr + '</span>' : '') +
+                (p.caption ? '<span class="photo-caption-text">' + p.caption + '</span>' : '') +
+                '</div>';
+            }
             return '<div class="photo-item ' + p.size + '">' +
               '<img src="photos/' + p.file + '" alt="' + alt + '" loading="lazy">' +
-              (p.caption ? '<span class="photo-caption">' + p.caption + '</span>' : '') +
-              '</div>';
+              caption + '</div>';
           }).join('');
         })
         .catch(function () {
@@ -1345,6 +1412,13 @@
             '<div style="padding:3rem;color:var(--muted);font-size:0.7rem;letter-spacing:0.15em;">找不到 photos/manifest.json — 請執行 python3 photos/generate.py</div>';
         });
     }());
+
+    function photoNav(dir) {
+      var strip = document.getElementById('photo-strip');
+      var item = strip.querySelector('.photo-item');
+      var step = item ? item.offsetWidth + 16 : 316;
+      strip.scrollBy({ left: dir * step, behavior: 'smooth' });
+    }
 
     /* ---- PHOTO STRIP DRAG ---- */
     (function () {
