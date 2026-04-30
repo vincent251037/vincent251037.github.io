@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 工具實驗記錄 — Vincent.AI</title>
+<link rel="stylesheet" href="../shared/journal.css">
+<style>
+.ai-summary {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 2rem 0 2.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+.ai-summary-stat { text-align: center; }
+.ai-summary-value {
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.ai-summary-label {
+  display: block;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.4rem;
+}
+.ai-summary-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--border);
+}
+
+.ai-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.ai-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.6rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.ai-card:hover {
+  border-color: var(--accent);
+  background: rgba(201,169,110,0.04);
+}
+
+.ai-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.ai-tool-badge {
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.22em 0.7em;
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.badge-aistudio { background: rgba(66,133,244,0.15); color: #6ba3ff; border: 1px solid rgba(66,133,244,0.3); }
+.badge-claude   { background: rgba(210,145,80,0.15);  color: #d29150; border: 1px solid rgba(210,145,80,0.3); }
+.badge-chatgpt  { background: rgba(16,163,127,0.15);  color: #10a37f; border: 1px solid rgba(16,163,127,0.3); }
+.badge-gemini   { background: rgba(234,67,53,0.12);   color: #ff8a80; border: 1px solid rgba(234,67,53,0.25); }
+.badge-other    { background: rgba(240,234,214,0.08); color: var(--muted); border: 1px solid var(--border); }
+
+.ai-card-date {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.ai-card-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.ai-card-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.ai-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  margin-top: auto;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+  transition: opacity 0.2s;
+}
+.ai-card-link:hover { opacity: 0.7; }
+.ai-card-link::after { content: '→'; }
+
+/* Empty state */
+.ai-empty {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 600px) {
+  .ai-summary { flex-wrap: wrap; gap: 1.5rem; }
+  .ai-grid { grid-template-columns: 1fr; }
+  #content { padding: 2rem 1.5rem 4rem; }
+}
+</style>
+</head>
+<body>
+
+<header id="page-header">
+  <a href="../index.html" class="back-link">← Vincent.AI</a>
+  <div class="page-title">AI 工具 <em>實驗記錄</em></div>
+  <div class="header-spacer"></div>
+</header>
+
+<div id="content">
+
+  <div class="ai-summary">
+    <div class="ai-summary-stat">
+      <span class="ai-summary-value" id="stat-count">1</span>
+      <span class="ai-summary-label">個實驗</span>
+    </div>
+    <div class="ai-summary-divider"></div>
+    <div class="ai-summary-stat">
+      <span class="ai-summary-value">1</span>
+      <span class="ai-summary-label">種工具</span>
+    </div>
+  </div>
+
+  <div class="ai-grid">
+
+    <!-- ── 實驗記錄 ── -->
+
+    <div class="ai-card">
+      <div class="ai-card-header">
+        <span class="ai-tool-badge badge-aistudio">Google AI Studio</span>
+        <span class="ai-card-date">2026.04.30</span>
+      </div>
+      <div class="ai-card-title">音檔轉錄 App</div>
+      <div class="ai-card-desc">將聲音檔轉成高品質逐字稿的實驗工具。可預先設定轉錄主題（如大乘佛教思想、成唯識論、知識圖譜），讓模型聚焦於專業詞彙；支援上傳講義或投影片作為參考，大幅提升術語辨識準確度。分段轉錄後可合併成一份完整文件，並下載為 PDF、TXT 或 Word 格式。</div>
+      <a class="ai-card-link"
+         href="https://aistudio.google.com/apps/30b52973-626a-4788-a5fb-93a86af1630b?showAssistant=true&project=gen-lang-client-0354091703&showCode=true"
+         target="_blank" rel="noopener">開啟 App</a>
+    </div>
+
+    <!-- 未來實驗可依此格式往下新增 -->
+
+  </div>
+</div>
+
+<script>
+if (new URLSearchParams(location.search).has('embed')) {
+  document.getElementById('page-header').style.display = 'none';
+}
+</script>
+
+</body>
+</html>

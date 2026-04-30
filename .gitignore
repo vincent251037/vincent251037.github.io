@@ -1,0 +1,18 @@
+# Raw GPS data (personal location tracks)
+rides/*.gpx
+hikes/*.gpx
+
+# Build logs
+rides/convert.log
+hikes/convert.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Planning / internal references
+Preference/
+
+# macOS
+.DS_Store

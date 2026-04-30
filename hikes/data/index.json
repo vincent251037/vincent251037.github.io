@@ -1,0 +1,117 @@
+[
+  {
+    "file": "activity_19158282867.json",
+    "source": "activity_19158282867.gpx",
+    "total_distance_km": 4.875,
+    "total_ascent_m": 205.8,
+    "total_descent_m": 419.4,
+    "max_elevation_m": 765.2,
+    "avg_speed_kmh": 3.33,
+    "duration_sec": 7656,
+    "start_time": "2025-05-18T03:49:14+00:00",
+    "end_time": "2025-05-18T05:56:50+00:00",
+    "point_count": 1920,
+    "area": "other",
+    "area_label": "其他",
+    "weather": {
+      "temp": 25.4,
+      "code": 53,
+      "icon": "🌦️",
+      "desc": "毛毛雨"
+    },
+    "name": "魚路古道",
+    "calories": 836
+  },
+  {
+    "file": "activity_19012087599.json",
+    "source": "activity_19012087599.gpx",
+    "total_distance_km": 2.552,
+    "total_ascent_m": 112.6,
+    "total_descent_m": 136.8,
+    "max_elevation_m": 65.6,
+    "avg_speed_kmh": 3.63,
+    "duration_sec": 3292,
+    "start_time": "2025-05-03T09:31:30+00:00",
+    "end_time": "2025-05-03T10:26:22+00:00",
+    "point_count": 812,
+    "area": "jinshan",
+    "area_label": "金山",
+    "weather": {
+      "temp": 27.7,
+      "code": 1,
+      "icon": "🌤️",
+      "desc": "少雲"
+    },
+    "name": "金山獅頭山步道",
+    "calories": 322
+  },
+  {
+    "file": "activity_18958405515.json",
+    "source": "activity_18958405515.gpx",
+    "total_distance_km": 2.351,
+    "total_ascent_m": 143.0,
+    "total_descent_m": 121.6,
+    "max_elevation_m": 57.6,
+    "avg_speed_kmh": 3.28,
+    "duration_sec": 3173,
+    "start_time": "2025-04-27T08:47:18+00:00",
+    "end_time": "2025-04-27T09:40:11+00:00",
+    "point_count": 811,
+    "area": "jinshan",
+    "area_label": "金山",
+    "weather": {
+      "temp": 25.8,
+      "code": 1,
+      "icon": "🌤️",
+      "desc": "少雲"
+    },
+    "name": "獅山頭步道-神秘海岸",
+    "calories": 502
+  },
+  {
+    "file": "activity_17171107239.json",
+    "source": "activity_17171107239.gpx",
+    "total_distance_km": 2.315,
+    "total_ascent_m": 100.2,
+    "total_descent_m": 84.0,
+    "max_elevation_m": 113.2,
+    "avg_speed_kmh": 3.34,
+    "duration_sec": 2888,
+    "start_time": "2024-09-12T07:59:34+00:00",
+    "end_time": "2024-09-12T08:47:42+00:00",
+    "point_count": 686,
+    "area": "jinshan",
+    "area_label": "金山",
+    "weather": {
+      "temp": 30.6,
+      "code": 0,
+      "icon": "☀️",
+      "desc": "晴"
+    },
+    "name": "法鼓山步道",
+    "calories": 246
+  },
+  {
+    "file": "activity_17171104751.json",
+    "source": "activity_17171104751.gpx",
+    "total_distance_km": 2.572,
+    "total_ascent_m": 52.0,
+    "total_descent_m": 93.8,
+    "max_elevation_m": 302.0,
+    "avg_speed_kmh": 4.42,
+    "duration_sec": 2654,
+    "start_time": "2024-09-01T08:34:56+00:00",
+    "end_time": "2024-09-01T09:19:10+00:00",
+    "point_count": 580,
+    "area": "jilong",
+    "area_label": "基隆",
+    "weather": {
+      "temp": 29.3,
+      "code": 0,
+      "icon": "☀️",
+      "desc": "晴"
+    },
+    "name": "佛光大學慢步",
+    "calories": 346
+  }
+]

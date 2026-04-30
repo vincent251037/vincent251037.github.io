@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>騎行日誌 — Vincent.AI</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="../shared/journal.css">
+</head>
+<body>
+
+<header id="page-header">
+  <a href="../index.html" class="back-link">← Vincent.AI</a>
+  <div class="page-title">騎行 <em>日誌</em></div>
+  <div class="header-spacer"></div>
+</header>
+
+<div id="content">
+  <div id="loading-msg">載入中…</div>
+</div>
+
+<script>
+const JOURNAL_CONFIG = {
+  countLabel:       '次騎乘',
+  routeColLabel:    '路線',
+  defaultAreaLabel: '活動',
+  errorCmd:         'cd rides && python convert.py',
+  kmStep: km => km <= 35 ? 5 : 10,
+  nameFor(item, detectArea) {
+    if (item.name) return item.name;
+    const { label } = detectArea(item.file);
+    const asc = item.total_ascent_m, km = item.total_distance_km;
+    let desc;
+    if      (asc >= 700) desc = '重爬挑戰';
+    else if (asc >= 500) desc = '山海之間';
+    else if (asc >= 350) desc = '慢騎探路';
+    else if (asc >= 200) desc = '海岸踩踏';
+    else if (km  >= 45)  desc = '長途巡迴';
+    else if (km  >= 38)  desc = '北海岸巡迴';
+    else                 desc = '輕騎出走';
+    return `${label} — ${desc}`;
+  },
+};
+</script>
+<script src="../shared/journal.js"></script>
+</body>
+</html>
