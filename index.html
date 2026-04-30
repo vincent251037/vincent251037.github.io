@@ -1420,6 +1420,26 @@
       strip.scrollBy({ left: dir * step, behavior: 'smooth' });
     }
 
+    /* ---- PHOTO STRIP: dynamic transform-origin to avoid edge clipping ---- */
+    (function () {
+      var strip = document.getElementById('photo-strip');
+      var wrap  = strip.parentElement;
+      strip.addEventListener('mouseover', function (e) {
+        var item = e.target.closest('.photo-item');
+        if (!item) return;
+        var wrapRect = wrap.getBoundingClientRect();
+        var itemRect = item.getBoundingClientRect();
+        var threshold = itemRect.width;
+        if (itemRect.left - wrapRect.left < threshold) {
+          item.style.transformOrigin = 'left center';
+        } else if (wrapRect.right - itemRect.right < threshold) {
+          item.style.transformOrigin = 'right center';
+        } else {
+          item.style.transformOrigin = 'center center';
+        }
+      });
+    }());
+
     /* ---- PHOTO STRIP DRAG ---- */
     (function () {
       const strip = document.getElementById('photo-strip');
